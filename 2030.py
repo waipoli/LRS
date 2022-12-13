@@ -1,33 +1,21 @@
 def main():
-    x = int(input())
-    l = 1
-    r = x
-    while(r -l > 1):
-        m = (r+l) // 2
-        if x - l*l >= r*r -x:
-            l = m
-        else:
+    n = int(input())
+    l = 0
+    r = n
+    while r - l > 1:
+        m = (r + l) // 2
+        if m * m > n:
             r = m
-#        print(l,r)
-#    print(l,r)
-    count = 100
-    while(l*l != x):
-        if count == 0 or l == 0:
-            break
-        l-=1
-        count-=1
+        else:
+            l = m
 
-    if l*l == x:
+    if r*r == n:
+        print(r)
+        exit(0)
+    if l*l == n:
         print(l)
         exit(0)
-    count = 100
-    while(r*r != x):
-        if count == 0:
-            break
-        r+=1
-        count-=1
-    if r*r == x:
-        print(r)
-    else:
-        print(-1)
-main()
+    print(-1)
+
+if __name__ == '__main__':
+    main()

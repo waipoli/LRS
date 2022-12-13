@@ -17,6 +17,8 @@ int phi (int n) {
 }
 
 
+
+
 int main() {
 
     int n;

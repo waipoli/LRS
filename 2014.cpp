@@ -31,6 +31,8 @@ int binPow(int a,int b)
     return binMult(binPow(a,b-1) % mod,a);
 }
 
+
+
 signed main()
 {
     int A,B,N,M;
