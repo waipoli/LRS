@@ -6,26 +6,65 @@
 using namespace std;
 #define int long long
 
-string tok(int n, int k, int s) {
-    string ans = "";
-    while (n) {
-        ans = char((n % k) + (int) ('0')) + ans;
-        n /= k;
+vector<string> get(int n, int k) {
+    if (n == 1) {
+        vector<string> ans;
+        for (int i = 0; i < k; i++) {
+            ans.push_back(to_string(i));
+        }
+        return ans;
     }
-    while (ans.size() != s)
-        ans = '0' + ans;
+    vector<string> ans;
+    auto l = get(n - 1, k);
+    for (int i = 0; i < k; i++) {
+        for (auto f: l) {
+            string s = to_string(i) + f;
+            ans.push_back(s);
+        }
+        reverse(l.begin(), l.end());
+    }
     return ans;
-}
-int k;
-
-int g(int n) {
-    return n ^ (n / 2);
 }
 
 signed main() {
-    int n;
+    int n, k;
     cin >> n >> k;
-    for (int i = 0; i < pow(k, n); i++) {
-        cout << tok(g(i), k, n) << endl;
-    }
+    auto f = get(n, k);
+    for (auto g: f)
+        cout << g << endl;
 }
+/*
+ * 0
+ * 1
+ * 2
+ *
+ * 00
+ * 01
+ * 02
+ * 12
+ * 11
+ * 10
+ * 20
+ * 21
+ * 22
+ *
+ * 000
+ * 001
+ * 002
+ * 012
+ * 011
+ * 010
+ * 020
+ * 021
+ * 022
+ * 122
+ * 121
+ * 120
+ * 110
+ * 111
+ * 112
+ * 102
+ * 101
+ *
+ *
+ * */
