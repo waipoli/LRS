@@ -38,6 +38,7 @@ string nextVector(string a) {
     return a;
 }
 
+
 string prevVector(string a) {
     int n = a.size();
     while ((n >= 0) and (a[n] != '1')) {
