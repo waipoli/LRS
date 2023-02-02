@@ -4,6 +4,9 @@
 using namespace std;
 #define int long long
 
+
+
+
 signed main()
 {
     int a1=0;
@@ -11,8 +14,7 @@ signed main()
     int a3=0;
     int n;
     cin>>n;
-    for(int i=0; i*i<n; i++)
-    {
+    for(int i=0; i*i<n; i++){
         a1++;
     }
 
