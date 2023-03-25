@@ -18,6 +18,7 @@ signed main(){
         return 0;
     }
 
+
     a-=b;
     int count=0;
     for(int i=1;i*i<=a;i++)

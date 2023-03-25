@@ -1,82 +1,115 @@
-#include<iostream>
-#include<vector>
-#include<algorithm>
-#include<cmath>
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <iomanip>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <string>
+#include <map>
+#include <set>
+#include <deque>
+#include <queue>
+#include <unordered_map>
+#include <unordered_set>
+#include <cstdio>
+#include <type_traits>
+#include <numeric>
+#include <bitset>
+#include <functional>
+
+#pragma GCC optimize("Ofast")
+#pragma GCC target("avx,avx2,fma")
+#pragma GCC optimization ("unroll-loops")
+#pragma GCC target("avx,avx2,sse,sse2,sse3,sse4,popcnt")
 
 using namespace std;
 
+//#define int long long
+#define float long double
+#define elif else if
+#define endl "\n"
+#define mod 1000000007
+#define pi acos(-1)
+#define eps 0.000000001
+#define inf INT64_MAX
+#define FIXED(a) cout << fixed << setprecision(a);
 
-int main() {
-    int n, m, w;
-    cin >> n;
-    cin >> m;
-    cin >> w;
-    vector<vector<vector<int>>> d;
-    vector<vector<vector<tuple<int, int, int>>>> P;
-    vector<int> a;
-    vector<int> b;
-    vector<int> c;
-    a.resize(n);
-    for (int i = 0; i < n; i++)
-        scanf("%d", &a[i]);
-    b.resize(m);
-    for (int i = 0; i < m; i++)
-        scanf("%d", &b[i]);
+struct Tuple {
+    short a;
+    short b;
+    short c;
+};
+short dp[301][301][301];
+Tuple path[301][301][301];
 
-    c.resize(w);
-    for (int i = 0; i < w; i++)
-        scanf("%d", &c[i]);
+signed main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    short N, M, K;
+    cin >> N >> M >> K;
+    vector<int> a(N);
+    vector<int> b(M);
+    vector<int> c(K);
+    for (int &el: a)
+        cin >> el;
 
-    d.resize(n + 1, vector<vector<int>>(m + 1, vector<int>(w + 1, -1)));
-    P.resize(n + 1, vector<vector<tuple<int, int, int>>>(m + 1, vector<tuple<int, int, int>>(w + 1, {-1, -1, -1})));
-    
-    for (int i = 0; i <= n; i++)
-        for (int j = 0; j <= m; j++)
-            for (int h = 0; h <= w; ++h) {
-                if (i == 0 or j == 0 or h == 0) {
-                    d[i][j][h] = 0;
+    for (int &el: b)
+        cin >> el;
+
+    for (int &el: c)
+        cin >> el;
+
+    for (int i = 0; i <= N; ++i)
+        for (int j = 0; j <= M; ++j)
+            for (int k = 0; k <= K; ++k)
+                dp[i][j][k] = 0;
+
+    for (int i = 0; i <= N; ++i)
+        for (int j = 0; j <= M; ++j)
+            for (int k = 0; k <= K; ++k)
+                path[i][j][k] = {-1, -1, -1};
+
+    for (short i = 1; i <= N; ++i) {
+        for (short j = 1; j <= M; ++j) {
+            for (short k = 1; k <= K; ++k) {
+
+                if (a[i - 1] == b[j - 1] and b[j - 1] == c[k - 1]) {
+                    dp[i][j][k] = dp[i - 1][j - 1][k - 1] + 1;
+                    path[i][j][k] = {static_cast<short>(i - 1), static_cast<short>(j - 1), static_cast<short>(k - 1)};
                     continue;
                 }
-                if (a[i - 1] == b[j - 1] and b[j - 1] == c[h - 1]) {
-                    P[i][j][h] = {i - 1, j - 1, h - 1};
-                    d[i][j][h] = d[i - 1][j - 1][h - 1] + 1;
-                } else {
-                    int u1, u2, u3;
-                    u1 = d[i - 1][j][h];
-                    u2 = d[i][j - 1][h];
-                    u3 = d[i][j][h - 1];
-                    if (u1 >= u2 and u1 >= u3) {
-                        d[i][j][h] = u1;
-                        P[i][j][h] = {i - 1, j, h};
-                        continue;
-                    }
-                    if (u2 >= u1 and u2 >= u3) {
-                        d[i][j][h] = u2;
-                        P[i][j][h] = {i, j - 1, h};
-                        continue;
 
-                    }
-                    if (u3 >= u1 and u3 >= u2) {
-                        d[i][j][h] = u3;
-                        P[i][j][h] = {i, j, h - 1};
-                        continue;
 
-                    }
-                }
+                short u1 = dp[i - 1][j][k];
+                short u2 = dp[i][j - 1][k];
+                short u3 = dp[i][j][k - 1];
+                short uMax = max({u1, u2, u3});
+                dp[i][j][k] = uMax;
+                if (uMax == u1)
+                    path[i][j][k] = {static_cast<short>(i - 1), j, k};
+                elif (uMax == u2)path[i][j][k] = {i, static_cast<short>(j - 1), k};
+                else
+                    path[i][j][k] = {i, j, static_cast<short>(k - 1)};
             }
-
-    cout << d[n][m][w] << endl;
-
-    tuple<int, int, int> f = {n, m, w};
-    vector<int> g;
-    while (get<0>(f) >= 0 and get<1>(f) >= 0 and get<2>(f) >= 0) {
-        if (P[get<0>(f)][get<1>(f)][get<2>(f)] == tuple<int, int, int>(get<0>(f) - 1, get<1>(f) - 1, get<2>(f) - 1)) {
-            g.push_back(a[get<0>(f) - 1]);
         }
-        f = P[get<0>(f)][get<1>(f)][get<2>(f)];
     }
-    reverse(g.begin(), g.end());
-    for (auto x: g)
-        cout << x << " ";
-    cout << endl;
+
+    cout << dp[N][M][K] << endl;
+
+    vector<int> ans;
+    Tuple t = {N, M, K};
+    Tuple next{};
+    while (t.a != 0 and t.b != 0 and t.c != 0) {
+        next = path[t.a][t.b][t.c];
+        if (next.a == t.a - 1 and next.b == t.b - 1 and next.c == t.c - 1)
+            ans.push_back(a[t.a - 1]);
+        t = next;
+    }
+    reverse(ans.begin(), ans.end());
+    for (long long an: ans) {
+        cout << an << " ";
+    }
+//    cout << endl;
 }

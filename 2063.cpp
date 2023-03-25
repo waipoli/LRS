@@ -66,6 +66,20 @@ void fill(int n) {
     cout << n << " ";
     fill(n - 2);
 }
+
+int phi (int n) {
+	int result = n;
+	for (int i=2; i*i<=n; ++i)
+		if (n % i == 0) {
+			while (n % i == 0)
+				n /= i;
+			result -= result / i;
+		}
+	if (n > 1)
+		result -= result / n;
+	return result;
+}
+
 // '' 'x' '
 signed main() {
     ios_base::sync_with_stdio(false);
@@ -73,5 +87,8 @@ signed main() {
     cout.tie(0);
     int n;
     cin >> n;
-    fill(n);
+//    fill(n);
+    for(int i=0;i<7;i++){
+        cout<<i*i
+    }
 }

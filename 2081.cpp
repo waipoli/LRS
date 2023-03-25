@@ -1,31 +1,32 @@
 #include<iostream>
 #include<vector>
 #include<algorithm>
+
 using namespace std;
 #define int long long
 
 
-
-
-signed main()
-{
-    int a1=0;
-    int a2=0;
-    int a3=0;
+signed main() {
     int n;
-    cin>>n;
-    for(int i=0; i*i<n; i++){
-        a1++;
-    }
+    cin >> n;
 
-    for(int i=0; i*i*i<n; i++)
-    {
-        a2++;
+    int f1 = 1, f2 = 1;
+    int cur = 0;
+    while (n) {
+        if (f1 * f1 == f2 * f2 * f2) {
+            n--;
+            cur = f1 * f1;
+            f1++;
+            f2++;
+        } else if (f1 * f1 < f2 * f2 * f2) {
+            n--;
+            cur = f1 * f1;
+            f1++;
+        } else if (f1 * f1 > f2 * f2 * f2) {
+            n--;
+            cur = f2 * f2 * f2;
+            f2++;
+        }
     }
-
-    for(int i=0; i*i*i*i*i*i<n; i++)
-    {
-        a3++;
-    }
-    cout<<a1+a2-a3<<endl;
+    cout << cur << endl;
 }
