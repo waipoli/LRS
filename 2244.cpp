@@ -51,29 +51,29 @@ signed main() {
     string S;
     string P;
     cin >> S >> P;
-//    cout << S.find('*') << endl;
     if (contains(S, '*') || contains(S, '?'))
         swap(S, P);
 
-    vector<vector<int>> dp(S.length() + 1, vector<int>(P.length() + 1, 0));
-    for (int i = 0; i < S.length(); ++i) {
-        for (int j = 0; j < P.length(); ++j) {
-            if (S[i] == P[j])
-                dp[i + 1][j + 1] = dp[i][j] + 1;
-            elif (P[i] == '?')dp[i + 1][j + 1] = dp[i][j] + 1;
-            elif (P[i] == '*') {
-                int max_ = -1;
-                for (int k = 0; k < dp[i].size(); ++k) {
-                    max_ = max(max_, dp[i][k]);
+    vector<vector<bool>> dp(S.size() + 1, vector<bool>(P.size() + 1, false));
+    dp[0][0] = true;
+    for (int i = 1; i <= S.size(); i++) {
+        for (int j = 1; j <= P.size(); ++j) {
+            if (P[j - 1] == '?') {
+                dp[i][j] = dp[i - 1][j - 1];
+            } elif (P[j - 1] == '*') {
+
+                bool res = false;
+                for(int k = 0; k <= i; ++k) {
+                    res |= dp[k][j - 1];
                 }
-                if(max_ == )
-            } else
-                dp[i + 1][j + 1] = max({dp[i][j], dp[i + 1][j], dp[i][j + 1]});
+                dp[i][j] = res;
+            } else {
+                if (S[i - 1] == P[j - 1])
+                    dp[i][j] = dp[i - 1][j - 1];
+                else
+                    dp[i][j] = false;
+            }
         }
     }
-
-    if (dp[S.length()][P.length()] != P.length())
-        cout << "NO" << endl;
-    else
-        cout << "YES" << endl;
+    cout << (dp[S.size()][P.size()] ? "YES" : "NO") << endl;
 }
